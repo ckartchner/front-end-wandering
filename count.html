@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scales=1">
+  <title>A few ways to track user behaviors in the browser</title>
+</head>
+<body>
+<hr>
+<h2>Cookies</h2>
+<button id="counter-cookie">Click for cookies!</button>
+<p>Number of cookie clicks: <span id="clicks-cookie"></span></p>
+<hr>
+<h2>Local Storage</h2>
+<button id="counter-local-storage">Click to count with local storage</button>
+<p>Number of local storage clicks: <span id="clicks-local-storage"></span></p>
+<hr>
+</body>
+<script>
+  function getClickCount() {
+    return localStorage.getItem("ClickCount") || 0;
+  }
+
+  function incrementLocalStorageCount() {
+    let currLSCount = getClickCount();
+    currLSCount++;
+    localStorage.setItem("ClickCount", currLSCount);
+    document.getElementById("clicks-local-storage").textContent = currLSCount;
+  }
+
+  function getCookieCount() {
+    // Assumes cookie count is always the first pair
+    return document.cookie.split("=")[1] || 0;
+  }
+
+  function incrementCookieCount() {
+    let currCookieCount = getCookieCount();
+    currCookieCount++;
+    document.cookie=`ClickCount=${currCookieCount}; samesite=strict`;
+    document.getElementById("clicks-cookie").textContent = getCookieCount();
+  }
+
+  document.getElementById("counter-local-storage").addEventListener("click", incrementLocalStorageCount);
+  document.getElementById("counter-cookie").addEventListener("click", incrementCookieCount);
+
+  document.getElementById("clicks-cookie").textContent = getCookieCount();
+  document.getElementById("clicks-local-storage").textContent = getClickCount();
+</script>
+</html>
